@@ -1,3 +1,6 @@
+# V023723245 Lezama Luis
+# V025793252 Ramírez Coalbert
+
 import os
 
 import gym

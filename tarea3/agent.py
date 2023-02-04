@@ -1,3 +1,5 @@
+# V023723245 Lezama Luis
+# V025793252 Ramírez Coalbert
 import numpy as np
 
 
