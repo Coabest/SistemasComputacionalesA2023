@@ -37,6 +37,7 @@ class PolicyIteration():
         self.reset()
 
     def reset(self):
+        # 1. Initialization
         self.values = np.zeros(self.states_n)
         self.policy = np.zeros(self.states_n)
 
@@ -50,18 +51,20 @@ class PolicyIteration():
 
         for _ in range(iterations):
             
+            # 2. Evaluation
             for s in range(self.states_n):
                 n_val = [sum([p * (r + self.gamma * self.values[s_])
                     for p, s_, r, _ in self.P[s][self.policy[s]]])]
                 self.values[s] = max(n_val)
                 self.policy[s] = np.argmax(np.array(n_val))
             
+            # 3. Improvement
             optimal_policy = True
             for s in range(self.states_n):
                 max_val = n_val
                 for a in range(self.actions_n):
                     improve_val = [sum([p* (r + self.gamma * self.values[s_])
-                            for p, s_, r, _ in self.P[s][a]])]
+                                for p, s_, r, _ in self.P[s][a]])]
                     if improve_val > max_val:
                         self.policy[s] = a
                         max_val = improve_val
