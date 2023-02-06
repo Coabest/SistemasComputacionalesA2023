@@ -16,8 +16,6 @@ class World:
             (settingss.WINDOW_WIDTH, settingss.WINDOW_HEIGHT)
         )
         pygame.display.set_caption(title)
-        self.P = P
-        self.battery = battery
         self.current_state = state
         self.state = state
         self.current_action = action
@@ -30,16 +28,6 @@ class World:
 
     def _create_tilemap(self):
         tile_texture_names = ["ice" for _ in range(settingss.NUM_TILES)]
-        for _, actions_table in self.P.items():
-            for _, possibilities in actions_table.items():
-                for _, state, reward, terminated in possibilities:
-                    if terminated:
-                        if reward > 0:
-                            self.finish_state = state
-                        else:
-                            tile_texture_names[state] = "hole"
-
-        tile_texture_names[self.finish_state] = "ice"
         self.tilemap = TileMap(tile_texture_names)
 
     def reset(self, state, action):
@@ -81,7 +69,8 @@ class World:
 
         if self.render_character:
             self.render_surface.blit(
-                settingss.TEXTURES['character'][self.action],
+                # settingss.TEXTURES['character'][self.action],
+                 settingss.TEXTURES['robot0'],
                 (self.tilemap.tiles[self.state].x,
                  self.tilemap.tiles[self.state].y)
             )

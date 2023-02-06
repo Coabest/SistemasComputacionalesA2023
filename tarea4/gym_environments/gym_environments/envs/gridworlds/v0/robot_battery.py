@@ -11,6 +11,8 @@ from .world import World
 
 class RobotBatteryEnv(gym.Env):
 
+    metadata = {"render_modes": ["human"], "render_fps": 16}
+
     def __init__(self, render_mode=None):
         super().__init__()
         self.action_space = gym.spaces.Discrete(settingss.NUM_ACTIONS)
@@ -28,9 +30,15 @@ class RobotBatteryEnv(gym.Env):
             
         for state in range(settingss.NUM_TILES):
             for action in range(settingss.NUM_ACTIONS):
+                if (state == settingss.FINAL_STATE):
+                    self.P[state][action].append([1.0, state, 1.0, True])
+                    print("assigned reward at state {}".format(state))
+                    break
+
                 probability = 1.0
-                next_state = state
-                reward = float(state == settingss.FINAL_STATE)
+                next_state = 0
+                reward = 0.0
+                
                 
                 # Calculate next state
                 row = int(state / settingss.ROWS)
@@ -44,8 +52,8 @@ class RobotBatteryEnv(gym.Env):
                 elif action == 3:
                     next_state = state if row == 0 else (row - 1) * settingss.ROWS + col
 
-                if state == settingss.FINAL_STATE:
-                    next_state = state
+                if next_state == settingss.FINAL_STATE:
+                    reward = 1.0
 
                 truncated = next_state == settingss.FINAL_STATE
                 # print ("getting to {} from {}, with action {}".format(next_state, state, action))
@@ -63,31 +71,51 @@ class RobotBatteryEnv(gym.Env):
         )
 
 
-
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
-        self.action = 0
-        self.reward = 0.0
-        self.state = settingss.INITIAL_STATE
+        self.current_action = 0
+        self.current_reward = 0.0
+        self.current_state = settingss.INITIAL_STATE
         self.battery = settingss.BATTERY
-        self.world.reset(self.state, self.action)
-        return self.state, {}
+        # self.world.reset(self.state, self.action)
+        return self.current_state, {}
 
     def step(self, action):
-        self.battery -= 1
-        self.action = self.current_action = action
-        
+        self.battery = max(0, self.battery - settingss.BATTERY_DISCOUNT)
+        self.current_action = action
+
+        print("in state {} should go to {} with action {}".format(self.current_state, self.P[self.current_state][action][0][1], action), end="")
+
         rng = np.random.random()
-        print ("is {} < {}?".format(rng, 1.0 - self.battery / settingss.BATTERY))
+        # print ("is {} < {}?".format(rng, 1.0 - self.battery / settingss.BATTERY))
         
         if  rng < 1 - self.battery / settingss.BATTERY:
             # Elegir ir a una diferente a la elegida por la acción
-            print ("Wrong action chosen!")
-            self.action = self.current_action = (action + 1)%settingss.NUM_ACTIONS
-        
-        self.reward = self.current_reward = self.P[self.current_state][action][0][2]
-        terminated = self.P[self.current_state][action][0][3] if self.battery else True
-        self.state = self.current_state = self.P[self.current_state][action][0][1]        
+            print (" BUT Wrong action chosen!", end="")
+            # Calculate next state
+            row = int(self.current_state / settingss.ROWS)
+            col = int(self.current_state % settingss.COLS)
+
+            next_action = np.random.randint(0, settingss.NUM_ACTIONS)
+            while next_action == action:
+                next_action = np.random.randint(0, settingss.NUM_ACTIONS)
+            
+            # if next_action == 0:
+            #     col = col if col == 0 else col - 1
+            # if next_action == 1:
+            #     row = row if row < settingss.ROWS - 1 else row + 1
+            # if next_action == 2:
+            #     col = col if col < settingss.COLS - 1 else col + 1
+            # if next_action == 3:
+            #     row = row if row == 0 else row - 1
+
+            self.current_action = next_action
+            # self.current_state = row * settingss.ROWS + col
+            
+        print(" and got to state {} with action {} and {} battery".format(self.P[self.current_state][self.current_action][0][1], self.current_action, self.battery))
+        self.reward = self.current_reward = self.P[self.current_state][self.current_action][0][2]
+        terminated = self.P[self.current_state][self.current_action][0][3] if self.battery > 0 else True
+        self.state = self.current_state = self.P[self.current_state][self.current_action][0][1]     
 
         self.world.update(
             self.current_state,
@@ -101,10 +129,10 @@ class RobotBatteryEnv(gym.Env):
         return self.state, self.reward, terminated, False, {}
 
     def render(self):
-        # print(self.battery)
+        # print("batery at {}%".format(self.battery))
         self.world.render()
-        # print(
-        #     "Action {}, reward {}, state {}".format(
-        #         self.action,
-        #         self.reward,
-        #         self.state))
+        print(
+            "Action {}, reward {}, state {}".format(
+                self.current_action,
+                self.current_reward,
+                self.current_state))
