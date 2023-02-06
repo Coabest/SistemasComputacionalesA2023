@@ -9,27 +9,28 @@ BATTERY = 100
 TILE_SIZE = 32
 
 # Grid
-ROWS = 3
-COLS = 2
+ROWS = 16
+COLS = 16
 
 NUM_TILES = ROWS * COLS
 NUM_ACTIONS = 4
 INITIAL_STATE = 0
+FINAL_STATE = ROWS*COLS - 1
 
 # Resolution to emulate
 VIRTUAL_WIDTH = TILE_SIZE * COLS
 VIRTUAL_HEIGHT = TILE_SIZE * ROWS
 
 # Scale factor between virtual screen and window
-H_SCALE = 4
-V_SCALE = 4
+H_SCALE = 1
+V_SCALE = 1
 
 # Resolution of the actual window
 WINDOW_WIDTH = VIRTUAL_WIDTH * H_SCALE
 WINDOW_HEIGHT = VIRTUAL_HEIGHT * V_SCALE
 
 # Default pause time between steps (in seconds)
-DEFAULT_DELAY = 0.5
+DEFAULT_DELAY = 0.1
 
 BASE_DIR = pathlib.Path(__file__).parent
 

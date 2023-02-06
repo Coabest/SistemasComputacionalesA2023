@@ -25,7 +25,7 @@ class World:
         self.render_character = True
         self.render_goal = True
         self.tilemap = None
-        self.finish_state = None
+        self.finish_state = settingss.FINAL_STATE
         self._create_tilemap()
 
     def _create_tilemap(self):
@@ -63,7 +63,6 @@ class World:
         self.action = action
 
     def render(self):
-        print(self.battery)
         self.render_surface.fill((0, 0, 0))
 
         self.tilemap.render(self.render_surface)
