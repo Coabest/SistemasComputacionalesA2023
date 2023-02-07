@@ -1,3 +1,7 @@
+'''
+Luis Lezama V023723245
+Coalbert Ramirez V025793252
+'''
 import os
 
 import gym
@@ -13,7 +17,7 @@ if "SDL_AUDIODRIVER" in os.environ:
 env = gym.make('RobotBattery-v0', render_mode="human")
 agent = ValueIteration(env.observation_space.n, env.action_space.n, env.P, 0.9)
 
-agent.solve(500)
+agent.solve(100)
 agent.render()
 
 observation, info = env.reset()
@@ -26,5 +30,5 @@ while not (terminated or truncated):
     action = agent.get_action(observation)
     observation, _, terminated, truncated, _ = env.step(action)
 
-time.sleep(1)
+time.sleep(3)
 env.close()
