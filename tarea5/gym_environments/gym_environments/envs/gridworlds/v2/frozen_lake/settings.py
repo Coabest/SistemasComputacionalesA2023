@@ -1,32 +1,42 @@
 import pathlib
 
 import pygame
+import numpy as np
 
 # Size of the square tiles used in this environment.
 TILE_SIZE = 32
 
 # Grid
-ROWS = 4
-COLS = 4
+# ROWS = 8
+# COLS = 8
+ROWS = np.random.randint(7, 8)
+COLS = np.random.randint(6, 7)
+
+print("ROWS: {} COLS: {}".format(ROWS, COLS))
+
+# Holes
+HOLES_RATIO = 15
+N_HOLES = int(ROWS * COLS * HOLES_RATIO / 100)
 
 NUM_TILES = ROWS * COLS
 NUM_ACTIONS = 4
 INITIAL_STATE = 0
+FINAL_STATE = NUM_TILES - 1
 
 # Resolution to emulate
 VIRTUAL_WIDTH = TILE_SIZE * COLS
 VIRTUAL_HEIGHT = TILE_SIZE * ROWS
 
 # Scale factor between virtual screen and window
-H_SCALE = 4
-V_SCALE = 4
+H_SCALE = 2
+V_SCALE = 2
 
 # Resolution of the actual window
 WINDOW_WIDTH = VIRTUAL_WIDTH * H_SCALE
 WINDOW_HEIGHT = VIRTUAL_HEIGHT * V_SCALE
 
 # Default pause time between steps (in seconds)
-DEFAULT_DELAY = 0.5
+DEFAULT_DELAY = 0.25
 
 BASE_DIR = pathlib.Path(__file__).parent
 

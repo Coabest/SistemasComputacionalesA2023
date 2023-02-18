@@ -22,16 +22,18 @@ def play(env, agent):
         action = agent.get_best_action(observation)
         observation, _, terminated, truncated, _ = env.step(action)
         env.render()
-        time.sleep(1)
+        time.sleep(0.5)
 
 
 if __name__ == "__main__":
-    env = gym.make("RobotMaze-v0", render_mode="human")
+    env = gym.make("FrozenLake-v2", render_mode="human")
+    # env = gym.make("RobotMaze-v0", render_mode="human")
     agent = MonteCarlo(
         env.observation_space.n, env.action_space.n, gamma=0.9, epsilon=0.9
     )
 
     train(env, agent, episodes=100)
+    print("HELLO")
     agent.render()
 
     play(env, agent)

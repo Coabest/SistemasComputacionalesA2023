@@ -1,5 +1,7 @@
 import pygame
 
+import numpy as np
+
 from . import settings
 from .tilemap import TileMap
 
@@ -25,15 +27,40 @@ class World:
         self._create_tilemap()
 
     def _create_tilemap(self):
+        holes_placed_n = settings.N_HOLES
+        holes_placed = [ False for _ in range(settings.NUM_TILES) ]
+
         tile_texture_names = ["ice" for _ in range(settings.NUM_TILES)]
-        for _, actions_table in settings.P.items():
-            for _, possibilities in actions_table.items():
-                for _, state, reward, terminated in possibilities:
-                    if terminated:
-                        if reward > 0:
-                            self.finish_state = state
-                        else:
-                            tile_texture_names[state] = "hole"
+        
+        while holes_placed_n:
+            row = np.random.randint(0, settings.ROWS)
+            col = np.random.randint(0, settings.COLS)
+            # print ("NUM_TILES: {},   TILE = {} * {} + {} = {}".format(
+            #     settings.NUM_TILES,
+            #     row,
+            #     settings.COLS,
+            #     col,
+            #     row * settings.COLS + col)
+            # )
+            while holes_placed[row * settings.COLS + col]:
+                row = np.random.randint(0, settings.ROWS)
+                col = np.random.randint(0, settings.COLS)
+            
+            holes_placed[row * settings.COLS + col] = True
+            tile_texture_names[row * settings.COLS + col] = "hole"
+            holes_placed_n = holes_placed_n - 1
+        
+        self.finish_state = settings.FINAL_STATE
+
+        # tile_texture_names = ["ice" for _ in range(settings.NUM_TILES)]
+        # for _, actions_table in settings.P.items():
+        #     for _, possibilities in actions_table.items():
+        #         for _, state, reward, terminated in possibilities:
+        #             if terminated:
+        #                 if reward > 0:
+        #                     self.finish_state = state
+        #                 else:
+        #                     tile_texture_names[state] = "hole"
 
         tile_texture_names[self.finish_state] = "ice"
         self.tilemap = TileMap(tile_texture_names)
@@ -81,6 +108,7 @@ class World:
             )
 
         if self.render_character:
+            # print("rendering character at state: {}".format(self.state))
             self.render_surface.blit(
                 settings.TEXTURES["character"][self.action],
                 (self.tilemap.tiles[self.state].x, self.tilemap.tiles[self.state].y),

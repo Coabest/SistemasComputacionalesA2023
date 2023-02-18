@@ -21,7 +21,55 @@ class FrozenLakeEnv(gym.Env):
         self.current_state = 0
         self.current_reward = 0.0
         self.delay = settings.DEFAULT_DELAY
-        self.P = settings.P
+
+        self.P = { state: { action: [] for action in range(settings.NUM_ACTIONS) } for state in range(settings.NUM_TILES) }
+        
+        for state in range(settings.NUM_TILES):
+            for action in range(settings.NUM_ACTIONS):
+                if (state == settings.FINAL_STATE):
+                    self.P[state][action].append([1.0, state, 1.0, True])
+                    continue
+
+                probability = 1.0
+                next_state = 0
+                reward = 0.0
+                truncated = False
+                
+                # Calculate next state
+                row = int(state / settings.ROWS)
+                col = int(state % settings.COLS)
+                if action == 0:
+                    next_state = state if col == 0 else row * settings.COLS + col - 1
+                    if next_state == settings.FINAL_STATE:
+                        print("reward assigned at state {}".format(state))
+                        reward = 1.0
+
+                    self.P[state][action].append([probability, next_state, reward, truncated]) 
+
+                elif action == 1:
+                    next_state = state if row == settings.ROWS - 1 else (row + 1) * settings.COLS + col
+                    if next_state == settings.FINAL_STATE:
+                        print("reward assigned at state {}".format(state))
+                        reward = 1.0
+
+                    self.P[state][action].append([probability, next_state, reward, truncated]) 
+                elif action == 2:
+                    next_state = state if col == settings.COLS - 1 else row * settings.COLS + col + 1
+                    if next_state == settings.FINAL_STATE:
+                        print("reward assigned at state {}".format(state))
+                        reward = 1.0
+
+                    self.P[state][action].append([probability, next_state, reward, truncated]) 
+                elif action == 3:
+                    next_state = state if row == 0 else (row - 1) * settings.COLS + col
+                    if next_state == settings.FINAL_STATE:
+                        print("reward assigned at state {}".format(state))
+                        reward = 1.0
+
+                    self.P[state][action].append([probability, next_state, reward, truncated]) 
+
+                
+
         self.world = World(
             "Frozen Lake Environment", self.current_state, self.current_action
         )
