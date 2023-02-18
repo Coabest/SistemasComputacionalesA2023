@@ -1,7 +1,7 @@
 import gym
 import time
 import gym_environments
-from agent import MonteCarlo
+from agent2 import MonteCarlo
 
 
 def train(env, agent, episodes):
@@ -26,12 +26,12 @@ def play(env, agent):
 
 
 if __name__ == "__main__":
-    env = gym.make("RobotMaze-v0", render_mode="human")
+    env = gym.make("FrozenLake-v2", render_mode="human")
     agent = MonteCarlo(
         env.observation_space.n, env.action_space.n, gamma=0.9, epsilon=0.9
     )
 
-    train(env, agent, episodes=100)
+    train(env, agent, episodes=10000000)
     agent.render()
 
     play(env, agent)
