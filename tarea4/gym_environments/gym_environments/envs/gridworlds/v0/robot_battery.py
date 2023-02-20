@@ -28,7 +28,7 @@ class RobotBatteryEnv(gym.Env):
         for state in range(settingss.NUM_TILES):
             for action in range(settingss.NUM_ACTIONS):
                 if (state == settingss.FINAL_STATE):
-                    self.P[state][action].append([1.0, state, 1.0, True])
+                    self.P[state][action].append([1.0, state, 0.0, True])
                     continue
 
                 probability = 1.0
@@ -39,16 +39,15 @@ class RobotBatteryEnv(gym.Env):
                 row = int(state / settingss.ROWS)
                 col = int(state % settingss.COLS)
                 if action == 0:
-                    next_state = state if col == 0 else row * settingss.ROWS + col - 1
+                    next_state = state if col == 0 else row * settingss.COLS + col - 1
                 elif action == 1:
-                    next_state = state if row == settingss.ROWS - 1 else (row + 1) * settingss.ROWS + col
+                    next_state = state if row == settingss.ROWS - 1 else (row + 1) * settingss.COLS + col
                 elif action == 2:
-                    next_state = state if col == settingss.COLS - 1 else row * settingss.ROWS + col + 1
+                    next_state = state if col == settingss.COLS - 1 else row * settingss.COLS + col + 1
                 elif action == 3:
-                    next_state = state if row == 0 else (row - 1) * settingss.ROWS + col
+                    next_state = state if row == 0 else (row - 1) * settingss.COLS + col
 
                 if next_state == settingss.FINAL_STATE:
-                    print("reward assigned at state {}".format(state))
                     reward = 1.0
 
                 truncated = False
@@ -103,8 +102,8 @@ class RobotBatteryEnv(gym.Env):
 
     def render(self):
         self.world.render()
-        print(
-            "Action {}, reward {}, state {}".format(
-                self.action,
-                self.reward,
-                self.state))
+        # print(
+        #     "Action {}, reward {}, state {}".format(
+        #         self.action,
+        #         self.reward,
+        #         self.state))

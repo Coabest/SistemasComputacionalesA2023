@@ -17,7 +17,7 @@ if "SDL_AUDIODRIVER" in os.environ:
 env = gym.make('RobotBattery-v0', render_mode="human")
 agent = ValueIteration(env.observation_space.n, env.action_space.n, env.P, 0.9)
 
-agent.solve(100)
+agent.solve(1000)
 agent.render()
 
 observation, info = env.reset()
@@ -30,5 +30,5 @@ while not (terminated or truncated):
     action = agent.get_action(observation)
     observation, _, terminated, truncated, _ = env.step(action)
 
-time.sleep(3)
+time.sleep(2)
 env.close()

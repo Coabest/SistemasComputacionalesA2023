@@ -27,7 +27,7 @@ class MonteCarlo:
         states_actions = []
         [
             states_actions.append((state, action))
-            for state, action, _ in self.episode
+            for state, action, _ in self.episode  
             if (state, action) not in states_actions
         ]
         for state, action in states_actions:
@@ -55,9 +55,7 @@ class MonteCarlo:
             best_action = np.argmax(self.q[state])
             for action in range(self.actions_n):
                 if action == best_action:
-                    self.pi[state][action] = (
-                        1 - self.epsilon + (self.epsilon / self.actions_n)
-                    )
+                    self.pi[state][action] = ( 1 - self.epsilon + (self.epsilon / self.actions_n) )
                 else:
                     self.pi[state][action] = self.epsilon / self.actions_n
 

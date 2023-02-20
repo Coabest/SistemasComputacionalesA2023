@@ -18,7 +18,6 @@ class ValueIteration():
 
     def render(self):
         print("Values: {}, Policy: {}".format(self.values, self.policy))
-        pass
 
     def solve(self, iterations):
         for _ in range(iterations):

@@ -4,7 +4,7 @@ import pygame
 
 # Battery
 BATTERY = 100
-BATTERY_DISCOUNT = 3
+BATTERY_DISCOUNT = 2
 
 # Size of the square tiles used in this environment.
 TILE_SIZE = 32
@@ -31,7 +31,7 @@ WINDOW_WIDTH = VIRTUAL_WIDTH * H_SCALE
 WINDOW_HEIGHT = VIRTUAL_HEIGHT * V_SCALE
 
 # Default pause time between steps (in seconds)
-DEFAULT_DELAY = 0.2
+DEFAULT_DELAY = 0.5
 
 BASE_DIR = pathlib.Path(__file__).parent
 

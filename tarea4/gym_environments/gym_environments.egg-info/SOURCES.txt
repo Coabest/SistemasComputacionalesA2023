@@ -37,3 +37,16 @@ gym_environments/envs/gridworlds/v2/frozen_lake/tilemap.py
 gym_environments/envs/gridworlds/v2/frozen_lake/world.py
 gym_environments/envs/gridworlds/v2/frozen_lake/assets/__init__.py
 gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/__init__.py
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/cracked_hole.png
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/elf_down.png
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/elf_left.png
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/elf_right.png
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/elf_up.png
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/goal.png
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/hole.png
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/ice.png
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/stool.png
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/sounds/ice_cracking.ogg
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/sounds/ice_village.ogg
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/sounds/water_splash.ogg
+gym_environments/envs/gridworlds/v2/frozen_lake/assets/sounds/win.ogg

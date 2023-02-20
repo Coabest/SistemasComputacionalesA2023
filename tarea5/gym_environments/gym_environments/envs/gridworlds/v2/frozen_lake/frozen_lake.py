@@ -27,7 +27,7 @@ class FrozenLakeEnv(gym.Env):
         for state in range(settings.NUM_TILES):
             for action in range(settings.NUM_ACTIONS):
                 if (state == settings.FINAL_STATE):
-                    self.P[state][action].append([1.0, state, 1.0, True])
+                    self.P[state][action].append([1.0, state, 0.0, True])
                     continue
 
                 probability = 1.0

@@ -11,7 +11,9 @@ class MonteCarlo:
     def reset(self):
         self.episode = []
         self.q = np.zeros((self.states_n, self.actions_n))
-        self.pi = np.zeros(self.states_n, dtype=int)
+        self.pi = np.full((self.states_n, self.actions_n), 1 / self.actions_n)
+        # self.pi = np.zeros(self.states_n)
+        # self.pi = [ None for _ in range(self.states_n) ]
         self.returns = np.zeros((self.states_n, self.actions_n))
         self.returns_n = np.zeros((self.states_n, self.actions_n))
 
@@ -19,7 +21,7 @@ class MonteCarlo:
         self.episode.append((state, action, reward))
         if terminated:
             self._update_q()
-            self._update_pi()
+            # self._update_pi()
             self.episode = []
 
     def _update_q(self):
@@ -46,6 +48,7 @@ class MonteCarlo:
             self.q[state][action] = (
                 self.returns[state][action] / self.returns_n[state][action]
             )
+            self.pi[state] = np.argmax(self.q[state])
 
     def _update_pi(self):
         states = []
@@ -54,7 +57,30 @@ class MonteCarlo:
             self.pi[state] = np.argmax(self.q[state])
 
     def get_action(self, state):
-        return self.pi[state]
+        best_action = np.max(self.pi[state])
+        print("best_action is {}".format(best_action))
+        print("for the table {} in {}".format(self.pi, self.pi[state]))
+        best_actions = [ i for i, action in enumerate(self.pi[state]) if action == best_action]
+        # print("best actions with value {} are {} chosen was ".format(np.max(self.pi[state]), best_actions), end="")
+        if (len(best_actions) > 1):
+            rnd = np.random.choice(best_actions)
+            # print(rnd)
+            return rnd
+        # if self.pi[state] == None:
+        #     rnd = np.random.choice(self.actions_n)
+        #     # rnd = np.random.randint(0,4)
+        #     print("choice was {} on state {}".format(rnd, state))
+        #     return rnd
+        
+        # print(np.max(self.pi[state]), end="")
+        # print(" in state {}, the whole action options are {}".format(state, self.pi))
+        else:  
+            # print(" the only one {}".format(np.argmax(self.pi[state])))
+            return np.argmax(self.pi[state])
+        # return np.max(self.pi[state])
+
+    def get_best_action(self, state):
+        return np.argmax(self.q[state])
 
     def render(self):
         print(f"Values: {self.q}\nPolicy: {self.pi}")
