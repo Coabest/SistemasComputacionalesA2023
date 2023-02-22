@@ -9,7 +9,8 @@ ENVIRONMENT = "Princess-v0"
 
 
 def train(env, agent, episodes):
-    for _ in range(episodes):
+    for i in range(episodes):
+        print(i)
         observation, _ = env.reset()
         terminated, truncated = False, False
         while not (terminated or truncated):

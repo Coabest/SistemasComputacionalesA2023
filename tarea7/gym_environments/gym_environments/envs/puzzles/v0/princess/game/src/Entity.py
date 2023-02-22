@@ -51,3 +51,10 @@ class Entity(DrawableMixin):
         self.off_set_i = 1
         self.off_set_j = 0
         self.move()
+
+    def set_position(self, new_i, new_j):
+        i, j = TileMap.to_map(self.x, self.y)
+        self.tile_map.tiles[i][j].busy_by = None
+        
+        self.x, self.y = TileMap.to_screen(new_i, new_j)
+        self.tile_map.tiles[new_i][new_j].busy_by = self.busy_mark

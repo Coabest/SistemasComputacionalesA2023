@@ -1,5 +1,6 @@
 from .. import settings
 
+import numpy as np
 from .Tilemap import Tile, TileMap
 from .MainCharacter import MainCharacter
 from .Statue import Statue
@@ -89,6 +90,15 @@ class World:
         return self.__check_win(self.statue_1, self.statue_2) or self.__check_win(
             self.statue_2, self.statue_1
         )
+
+    def set_state(self, mc, s1, s2):
+        mc_ = int(np.floor(mc / self.tile_map.cols)), int(mc % self.tile_map.cols)
+        s1_ = int(np.floor(s1 / self.tile_map.cols)), int(s1 % self.tile_map.cols)
+        s2_ = int(np.floor(s2 / self.tile_map.cols)), int(s2 % self.tile_map.cols)
+        self.main_character.set_position(*mc_)
+        self.statue_1.set_position(*s1_)
+        self.statue_2.set_position(*s2_)
+        pass
 
     def get_state(self):
         mc_i, mc_j = TileMap.to_map(self.main_character.x, self.main_character.y)
