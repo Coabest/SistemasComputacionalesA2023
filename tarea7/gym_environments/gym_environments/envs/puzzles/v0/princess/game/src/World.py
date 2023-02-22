@@ -102,7 +102,6 @@ class World:
         self.main_character.set_position(*mc_)
         self.statue_1.set_position(*s1_)
         self.statue_2.set_position(*s2_)
-        pass
 
     def get_state(self):
         mc_i, mc_j = TileMap.to_map(self.main_character.x, self.main_character.y)

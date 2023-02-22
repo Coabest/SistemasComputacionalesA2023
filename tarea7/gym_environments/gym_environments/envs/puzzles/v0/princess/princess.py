@@ -48,16 +48,9 @@ class PrincessEnv(gym.Env):
                 self.game.world.set_state(mc, s1, s2)
 
                 # Check some invalid states and skip
-                if ((s1 == s2)
-                    or ((mc, s1, s2) == 2)
-                    or ((mc, s1, s2) == 15)
-                    or ((mc, s1, s2) == 19)
-                    or ((mc, s1, s2) == 20)
-                    or ((mc, s1, s2) == 24)
-                    or ((mc, s1, s2) == 25)
-                    or ((mc, s1, s2) == 26)
-                    or ((mc, s1, s2) == 28)
-                    or ((mc, s1, s2) == 29)):
+                # There are only 21*21*20 - 21 = 8799 reachable states out of the 27000 in the
+                # observation space. This verification skips processing those unreachable states
+                if (s1 == s2 or set([mc, s1, s2]).intersection(set([2,15,19,20,24,25,26,28,29]))):
                     continue
 
                 # Check if it is in a win state, i.e. 188 or 246

@@ -26,7 +26,6 @@ def train(env, agent, episodes):
             )
             observation = new_observation
 
-
 def play(env, agent):
     observation, _ = env.reset()
     env.render()
@@ -45,13 +44,12 @@ def play(env, agent):
         observation = new_observation
         env.render()
 
-
 if __name__ == "__main__":
 
     env = gym.make(ENVIRONMENT, render_mode="human")
     agent = ValueIteration(env.observation_space.n, env.action_space.n, env.P, 0.9)
 
-    agent.solve(1)
+    agent.solve(100)
     agent.render()
 
     observation, info = env.reset()
@@ -62,8 +60,6 @@ if __name__ == "__main__":
 
     i = 0
     while not (terminated or truncated):
-        if i:
-            print(i)
         action = agent.get_action(observation)
         observation, _, terminated, truncated, _ = env.step(action)
 
