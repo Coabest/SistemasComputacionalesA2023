@@ -1,3 +1,6 @@
+# V023723245 Lezama Luis
+# V025793252 Ramírez Coalbert
+
 import sys
 import time
 import gym
@@ -59,7 +62,6 @@ if __name__ == "__main__":
 
     i = 0
     while not (terminated or truncated):
-        # if not i%100:
         if i:
             print(i)
         action = agent.get_action(observation)
