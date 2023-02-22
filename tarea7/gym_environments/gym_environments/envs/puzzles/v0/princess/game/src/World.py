@@ -1,3 +1,6 @@
+# V023723245 Lezama Luis
+# V025793252 Ramírez Coalbert
+
 from .. import settings
 
 import numpy as np
@@ -95,6 +98,7 @@ class World:
         mc_ = int(np.floor(mc / self.tile_map.cols)), int(mc % self.tile_map.cols)
         s1_ = int(np.floor(s1 / self.tile_map.cols)), int(s1 % self.tile_map.cols)
         s2_ = int(np.floor(s2 / self.tile_map.cols)), int(s2 % self.tile_map.cols)
+        
         self.main_character.set_position(*mc_)
         self.statue_1.set_position(*s1_)
         self.statue_2.set_position(*s2_)

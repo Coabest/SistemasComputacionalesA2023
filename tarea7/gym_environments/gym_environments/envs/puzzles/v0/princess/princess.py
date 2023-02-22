@@ -1,12 +1,11 @@
+# V023723245 Lezama Luis
+# V025793252 Ramírez Coalbert
+
 import time
-
 import numpy as np
-
 import pygame
-
 import gym
 from gym import spaces
-
 from .game.Game import Game
 
 
@@ -81,7 +80,6 @@ class PrincessEnv(gym.Env):
                     self.terminated = True
 
                 P[state][action].append([probability, next_state, reward, self.terminated])
-                # time.sleep(1)
 
         self.current_state = self.game.reset()
         return P
