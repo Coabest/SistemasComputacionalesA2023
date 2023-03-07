@@ -1,0 +1,8 @@
+include gym_environments/envs/bandits/v1/assets/fonts/*
+include gym_environments/envs/bandits/v1/assets/graphics/*
+include gym_environments/envs/gridworlds/v2/frozen_lake/assets/graphics/*
+include gym_environments/envs/gridworlds/v2/frozen_lake/assets/sounds/*
+include gym_environments/envs/puzzles/v0/princess/game/graphics/*
+include gym_environments/envs/puzzles/v0/princess/game/env.txt
+include gym_environments/envs/puzzles/v0/blocks/game/graphics/*
+include gym_environments/envs/puzzles/v0/blocks/game/env.txt
