@@ -28,7 +28,7 @@ def run(env, agent: DYNAQ, selection_method, episodes):
 
 if __name__ == "__main__":
     environments = ["Princess-v0", "Blocks-v0"]
-    id = 0 if len(sys.argv) < 2 else int(sys.argv[1])
+    id = 1 if len(sys.argv) < 2 else int(sys.argv[1])
     episodes = 350 if len(sys.argv) < 3 else int(sys.argv[2])
 
     env = gym.make(environments[id])
