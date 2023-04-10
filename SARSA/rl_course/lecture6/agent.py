@@ -22,16 +22,39 @@ class SARSA:
         self.q_table = np.zeros((self.states_n, self.actions_n))
 
     def update(
-        self, state, action, next_state, next_action, reward, terminated, truncated
+        self, state, action, next_state, next_action, reward, terminated, truncated, algorithm
     ):
         self._update(
             state, action, next_state, next_action, reward, terminated, truncated
         )
-        self.q_table[state, action] = self.q_table[state, action] + self.alpha * (
-            reward
-            + self.gamma * self.q_table[next_state, next_action]
-            - self.q_table[state, action]
-        )
+        if algorithm == "SARSA":
+            self.q_table[state, action] = self.q_table[state, action] + self.alpha * (
+                reward
+                + self.gamma * self.q_table[next_state, next_action]
+                - self.q_table[state, action]
+            )
+        elif algorithm == "Expected_SARSA":
+            expected_q = 0
+            q_max = np.max(self.q_table[next_state, :])
+            greedy_actions = 0
+            for i in range(self.actions_n):
+                if self.q_table[next_state][i] == q_max:
+                    greedy_actions += 1
+            
+            nongreedy_action_p = self.epsilon / self.actions_n
+            greedy_action_p = ((1 - self.epsilon) / greedy_actions) + nongreedy_action_p
+
+            for i in range(self.actions_n):
+                if self.q_table[next_state][i] == q_max:
+                    expected_q += self.q_table[next_state][i] * greedy_action_p
+                else:
+                    expected_q += self.q_table[next_state][i] * nongreedy_action_p
+
+            self.q_table[state, action] = self.q_table[state, action] + self.alpha * (
+                reward
+                + self.gamma * expected_q
+                - self.q_table[state, action]
+            )
 
     def _update(
         self, state, action, next_state, next_action, reward, terminated, truncated

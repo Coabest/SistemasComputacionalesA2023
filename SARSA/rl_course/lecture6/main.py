@@ -1,8 +1,11 @@
 import sys
 import gym
 import gym_environments
-import numpy as np
 from agent import SARSA
+
+import matplotlib.pyplot as plt
+import numpy as np
+from statistics import mean
 
 
 def calculate_states_size(env):
@@ -18,15 +21,18 @@ def calculate_state(env, value):
     return int(values[1]) * 19 + int(values[0])
 
 
-def run(env, agent, selection_method, episodes):
+def run(env, agent, selection_method, episodes, algorithm):
+    table = []
     for episode in range(1, episodes + 1):
-        if episode % 100 == 0:
-            print(f"Episode: {episode}")
+        y = 0
+        if episode % 500 == 0:
+            print(f"   {algorithm}, Episode: {episode}")
         observation, _ = env.reset()
         action = agent.get_action(calculate_state(env, observation), selection_method)
         terminated, truncated = False, False
         while not (terminated or truncated):
             new_observation, reward, terminated, truncated, _ = env.step(action)
+            y += reward
             next_action = agent.get_action(
                 calculate_state(env, new_observation), selection_method
             )
@@ -38,9 +44,15 @@ def run(env, agent, selection_method, episodes):
                 reward,
                 terminated,
                 truncated,
+                algorithm
             )
             observation = new_observation
             action = next_action
+        table.append(y)
+        # print(f"     On episode {episode}, reward is {y}")
+    # average value of rewards
+    return mean(table)
+    # return table[-1]
 
 
 if __name__ == "__main__":
@@ -48,20 +60,66 @@ if __name__ == "__main__":
 
     env = gym.make("MountainCar-v0")
 
-    agent = SARSA(
-        calculate_states_size(env),
-        env.action_space.n,
-        alpha=0.1,
-        gamma=0.9,
-        epsilon=0.1,
-    )
+    alphas = [0.2, 0.4, 0.6, 0.8]
+    _alpha = alphas[0]
 
-    # Train
-    run(env, agent, "epsilon-greedy", episodes)
-    env.close()
+    SARSA_rewards = np.zeros(len(alphas))
+    Expected_SARSA_rewards = np.zeros(len(alphas))
+    tests = 1
 
-    # Play
-    env = gym.make("MountainCar-v0", render_mode="human")
-    run(env, agent, "greedy", 1)
-    agent.render()
+    for test in range(1, tests + 1):
+        print(f"Test: {test}")
+        for j, _alpha in enumerate(alphas):
+            print(f"  Alpha: {_alpha}")
+            SARSA_agent = SARSA(
+                calculate_states_size(env),
+                env.action_space.n,
+                alpha=_alpha,
+                gamma=0.9,
+                epsilon=0.1
+            )
+
+            Expected_SARSA_agent = SARSA(
+                calculate_states_size(env),
+                env.action_space.n,
+                alpha=_alpha,
+                gamma=0.9,
+                epsilon=0.1
+            )
+
+            # Train
+            SARSA_rewards[j] += run(
+                env,
+                SARSA_agent,
+                "epsilon-greedy",
+                episodes,
+                "SARSA"
+            )
+            print(f"SARSA reward: {SARSA_rewards[j]}")
+            # env.close()
+            Expected_SARSA_rewards[j] += run(
+                env,
+                Expected_SARSA_agent,
+                "epsilon-greedy",
+                episodes,
+                "Expected_SARSA"
+            )
+            # env.close()
+
+    for i in range(len(alphas)):
+        SARSA_rewards[i] = SARSA_rewards[i] / tests
+        Expected_SARSA_rewards[i] = Expected_SARSA_rewards[i] / tests
+
+    plt.plot(alphas, SARSA_rewards, label = 'SARSA')
+    plt.plot(alphas, Expected_SARSA_rewards, label = 'Expected SARSA')
+    ax1 = plt.subplot()
+    ax1.set_xticks(alphas)
+    ax1.set_xticklabels(["0.2", "0.4", "0.6", "0.8"])
+    plt.xlabel('x - Alpha')
+    plt.ylabel('y - Avg. Reward')
+    
+    plt.title('SARSA Vs. Expected SARSA')
+    plt.legend()
+    plt.show()
+
     env.close()
