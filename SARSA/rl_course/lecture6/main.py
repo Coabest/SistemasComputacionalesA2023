@@ -60,12 +60,12 @@ if __name__ == "__main__":
 
     env = gym.make("MountainCar-v0")
 
-    alphas = [0.2, 0.4, 0.6, 0.8]
+    alphas = [0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.6, 0.8, 1.0]
     _alpha = alphas[0]
 
     SARSA_rewards = np.zeros(len(alphas))
     Expected_SARSA_rewards = np.zeros(len(alphas))
-    tests = 1
+    tests = 4
 
     for test in range(1, tests + 1):
         print(f"Test: {test}")
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     plt.plot(alphas, Expected_SARSA_rewards, label = 'Expected SARSA')
     ax1 = plt.subplot()
     ax1.set_xticks(alphas)
-    ax1.set_xticklabels(["0.2", "0.4", "0.6", "0.8"])
+    ax1.set_xticklabels(["0.05", "0.1", "0.15", "0.2", "0.3", "0.4", "0.6", "0.8", "1.0"])
     plt.xlabel('x - Alpha')
     plt.ylabel('y - Avg. Reward')
     
