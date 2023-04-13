@@ -40,58 +40,40 @@ if __name__ == "__main__":
 
     env = gym.make(environments[id])
 
-    steps_per_episode_DQ = np.zeros(episodes)
-    steps_per_episode_DQPlus = np.zeros(episodes)
+    steps_DQ = np.zeros(episodes)
+    steps_DQPlus = np.zeros(episodes)
+    runs = 3
 
-    DQ_agent = DYNAQ(
-        env.observation_space.n,
-        env.action_space.n,
-        alpha=1,
-        gamma=0.95,
-        epsilon=0.1
-    )
+    for i in range(runs):
+        DQ_agent = DYNAQ(
+            env.observation_space.n,
+            env.action_space.n,
+            alpha=1,
+            gamma=0.95,
+            epsilon=0.1
+        )
+        steps_DQ += run(env, DQ_agent, "epsilon-greedy", episodes )
 
-    DQPlus_agent = DYNAQPLUS(
-        env.observation_space.n,
-        env.action_space.n,
-        alpha=1,
-        gamma=0.95,
-        epsilon=0.1,
-        kappa=1e-4
-    )
+        DQPlus_agent = DYNAQPLUS(
+            env.observation_space.n,
+            env.action_space.n,
+            alpha=1,
+            gamma=0.95,
+            epsilon=0.1,
+            kappa=1e-4
+        )
+        steps_DQPlus += run(env, DQPlus_agent, "epsilon-greedy", episodes )
+    
+    steps_DQ = steps_DQ / runs
+    steps_DQPlus = steps_DQPlus / runs
 
-    # Train
-    steps_per_episode_DQ = run(
-        env,
-        DQ_agent,
-        "epsilon-greedy",
-        episodes
-    )
-    # env.close()
-    steps_per_episode_DQPlus = run(
-        env,
-        DQPLus_agent,
-        "epsilon-greedy",
-        episodes
-    )
-    # env.close()
-
-    plt.plot(steps_per_episode_DQ, label = 'SARSA')
-    plt.plot(steps_per_episode_DQPlus, label = 'Expected SARSA')
-    # ax1 = plt.subplot()
-    # ax1.set_xticks(alphas)
-    # ax1.set_xticklabels(["0.05", "0.1", "0.15", "0.2", "0.3", "0.4", "0.6", "0.8", "1.0"])
+    plt.plot(steps_DQ, label = 'Dyna-Q')
+    plt.plot(steps_DQPlus, label = 'Dyna-Q+')
     plt.xlabel('x - Episodes')
     plt.ylabel('y - Steps per episode')
     
-    plt.title('Dyna-Q Vs. Dyna-Q PLus')
+    plt.title('Dyna-Q Vs. Dyna-Q+')
     plt.legend()
     plt.show()
 
     env.close()
-
-    # Play
-    # env = gym.make(environments[id], render_mode="human")
-    # run(env, DQ_agent, "greedy", 1)
-    # DQ_agent.render()
-    # env.close()
