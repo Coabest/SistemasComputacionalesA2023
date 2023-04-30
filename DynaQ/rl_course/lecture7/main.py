@@ -35,13 +35,13 @@ def run(env, agent, selection_method, episodes):
 if __name__ == "__main__":
     environments = ["Princess-v0", "Blocks-v0"]
     id = 1 if len(sys.argv) < 2 else int(sys.argv[1])
-    episodes = 7 if len(sys.argv) < 3 else int(sys.argv[2])
+    episodes = 500 if len(sys.argv) < 3 else int(sys.argv[2])
 
     env = gym.make(environments[id])
 
     steps_DQ = np.zeros(episodes)
     steps_DQPlus = np.zeros(episodes)
-    runs = 1
+    runs = 3
 
     bestEpisode_DQ = 1e9
     bestEpisode_DQPlus = 1e9
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     for i in range(episodes):
         steps_difference += int(steps_DQ[i] - steps_DQPlus[i])
 
-    print(f"\nIn total Dyna-Q+ took {steps_DQPlus} less steps than Dyna-Q")
+    print(f"\nIn total Dyna-Q+ took {steps_difference} less steps than Dyna-Q")
 
     plt.plot(steps_DQ - steps_DQPlus, label = 'DynaQPLus - DynaQ')
     plt.xlabel('x - Episodes')
